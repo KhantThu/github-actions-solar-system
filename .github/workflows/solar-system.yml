@@ -63,5 +63,27 @@ jobs:
             path: coverage
             retention-days: 5
 
+    dev-deploy:
+        name: Development
+        needs: docker
+        runs-on: ubuntu-latest
+        environment: 
+          name: development
+        steps:
+          - name: Install Kubectl
+            uses: azure/setup-kubectl@v4
+            with:
+              version: 'v1.28.1'
+
+          - name: to set kube context
+            uses: azure/k8s-set-context@v4
+            with:
+              method: kubeconfig
+              kubeconfig: ${{ secrets.KUBECONFIG }}
+
+          - name: kubectl command to verify Step 2 and 3
+            run: kubectl version -o yaml
+            
+
 
         
